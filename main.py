@@ -4,9 +4,7 @@ from dotenv import load_dotenv
 
 from langchain.agents import AgentExecutor
 from langchain.agents import create_react_agent
-
 from langchain_core.prompts import PromptTemplate
-
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 from tmdb_tool import movie_search_tool
@@ -85,7 +83,6 @@ Question: {input}
 
 
 def build_agent():
-
     api_key = os.getenv("GOOGLE_API_KEY")
 
     if not api_key:
@@ -115,21 +112,26 @@ def build_agent():
     )
 
 
-def main():
-
-    print("\nMovie Recommendation ReAct Agent")
-    print("-" * 40)
-
-    query = input("\nEnter your request: ")
-
+def run_agent(query: str) -> str:
     agent_executor = build_agent()
 
     result = agent_executor.invoke(
         {"input": query}
     )
 
+    return result["output"]
+
+
+def main():
+    print("\nMovie Recommendation ReAct Agent")
+    print("-" * 40)
+
+    query = input("\nEnter your request: ")
+
+    output = run_agent(query)
+
     print("\nFinal Recommendation:\n")
-    print(result["output"])
+    print(output)
 
 
 if __name__ == "__main__":
